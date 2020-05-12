@@ -3,7 +3,7 @@
 
 ## 安装
 ```
-go get git.yingxiong.com/support/framework
+go get github.com/hongker/framework
 ```
 ## 组件
 - 支持web服务,定时任务
@@ -17,12 +17,6 @@ go get git.yingxiong.com/support/framework
 基于`github.com/gin-gonic/gin`实现的高性能，可扩展的web服务
 - 开始使用
 ```go
-package main
-import (
-    "framework/http"
-    "framework/http/response"
-    "github.com/gin-gonic/gin"
-)
 func main() {
     server := http.NewServer()
     // 添加路由
@@ -75,7 +69,6 @@ server.Router.Get("/money", handler.MoneyHandler).Use(middleware.Permission)
 ### 配置
 - 加载配置
 ```go
-import "framework/config"
 package main
 func init() {
     // 一般来说配置文件的加载都是放在main.go里的init函数里执行
@@ -123,10 +116,6 @@ someIntConfig := viper.GetInt("someIntKey")
 ### 日志
 基于`github.com/sirupsen/logrus`实现的日志组件
 ```go
-import (
- "framework/component/log"
-)
-
 func main() {
     log.Info("message", log.Content{
         "content":"this is log content",

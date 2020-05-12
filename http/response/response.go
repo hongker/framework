@@ -9,16 +9,14 @@ import (
 )
 
 const(
+	// 请求ID前缀
+	requestPrefix = "request:"
+	// 成功提示信息
 	successMessage = "success"
 )
 
-type IResponse interface {
-
-}
-
 // 数据对象
 type Data map[string]interface{}
-
 
 // Response
 type Response struct {
@@ -33,35 +31,8 @@ type Response struct {
 
 	// 元数据，如分页,请求ID
 	Meta Meta `json:"meta"`
-	// // 表单错误信息
-	// Error []ErrorItem `json:"error"`
 }
 
-type PaginateResponse struct {
-	// 提示信息
-	Message string `json:"msg"`
-
-	// 业务码
-	Code int `json:"code"`
-
-	// 数据
-	Data interface{} `json:"data"`
-
-	// 元数据，如分页,请求ID
-	Meta Meta `json:"meta"`
-
-	// 当前页数
-	PageNo int `json:"page_no"`
-
-	// 总页数
-	PageTotal int `json:"page_total"`
-
-}
-
-const(
-	// 请求ID前缀
-	requestPrefix = "request:"
-)
 
 // requestId
 func requestId() string  {
@@ -82,8 +53,8 @@ type Meta struct {
 
 	// 全局追踪ID,服务化必备
 	TraceId string `json:"trace_id"`
-	// 分页,因为历史原因，分页数据需要放在外面。。
-	//Pagination *paginate.Pagination `json:"pagination"`
+	// 分页
+	Pagination *paginate.Pagination `json:"pagination"`
 }
 
 
@@ -99,52 +70,50 @@ func Wrap(ctx *gin.Context) *wrapper  {
 	}
 }
 
-// output output response
-func (w *wrapper) output(response IResponse) {
+// newResponse 构造一个Response
+func newResponse(code int, message string) Response  {
+	return Response{
+		Message: message,
+		Code:    code,
+		Data:    nil,
+		Meta:    Meta{
+			RequestId:  requestId(),
+			TraceId:  trace.Get(),
+			Pagination: nil,
+		},
+	}
+}
 
+// output output response
+func (w *wrapper) output(response Response) {
 	w.ctx.JSON(200, response)
 }
 
 // Success 输出成功响应
 func (w *wrapper) Success(data interface{})  {
-	response := &Response{
-		Message: "成功",
-		Code:    0,
-		Data:    data,
-		Meta:   meta() ,
-	}
+	response := newResponse(0, successMessage)
+	response.Data = data
 
 	w.output(response)
 }
 
 // Error 输出错误响应
 func (w *wrapper) Error(code int, message string)  {
-	response := &Response{
-		Message: message,
-		Code:    code,
-		Data:    nil,
-		Meta:    meta(),
-	}
+	response := newResponse(code, message)
 
 	w.output(response)
 }
 
 // Paginate 输出分页响应内容
-func (w *wrapper) Paginate(data interface{}, pagination paginate.Pagination) {
+func (w *wrapper) Paginate(data interface{}, pagination *paginate.Pagination) {
+	response := newResponse(0, successMessage)
 	// 如果data为nil,则默认设置为[]
 	v := reflect.ValueOf(data)
 	if v.IsNil() {
 		data = []interface{}{}
 	}
-
-	response := &PaginateResponse{
-		Message: successMessage,
-		Code:    0,
-		Data:    data,
-		Meta:    meta(),
-		PageNo: pagination.PageNo,
-		PageTotal: pagination.PageTotal,
-	}
+	response.Data = data
+	response.Meta.Pagination = pagination
 
 	w.output(response)
 }
