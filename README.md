@@ -64,7 +64,7 @@ func DemoHander(ctx *gin.Context) {
 
 - 请求参数   
 介绍在`handler`里如何获取请求参数   
-```
+```go
 // ctx 为 *gin.Context
 // 获取url上的get参数，如url: /user/info?name=alice
 router.Get("/user/info", func(ctx *gin.Context) {
@@ -131,10 +131,11 @@ func init() {
     // 一般来说配置文件的加载都是放在main.go里的init函数里执行
     // 两种方式可以二选一，也可以两个都用
     config.ReadFromEnvironment() // 从环境变量中读取配置
+    configFilePath := "app.yaml"
     err := config.ReadFromFile(configFilePath) // 通过文件读取配置.如果加载失败，建议中断启动:os.Exit(-1)
 }
 func main() {
-    
+    // 读取配置
 }
 
 ```
@@ -166,6 +167,13 @@ someIntConfig := viper.GetInt("someIntKey")
 基于`github.com/uber/dig`的依赖注入模式，通过统一的`app`模块管理如mysql连接，redis连接等全局变量。
 #### 数据库
 集成业界好评且强大的`github.com/jinzhu/gorm`,实现对mysql数据的操作。
+```go
+// 在成功加载配置后，初始化数据库连接,连接失败时panic
+secure.Panic(app.InitDB())
+
+// 获取数据库连接
+app.DB()
+```
 #### Redis
 
 #### Elastic
@@ -183,4 +191,35 @@ func main() {
         "err": someError.Error(),
     })
 }
+```
+
+### 参数校验器
+通过强大的参数校验器校验请求参数，可以大量减少请求参数的判断逻辑代码，提高代码的可读性。
+- 初始化
+```go
+// 在main函数前配置自定义的参数校验器
+binding.Validator = new(validator.Validator)
+```
+
+- 设置校验规则
+标签里的`binding`为关键字，指定规则。 `comment`为字段名称，用于错误输出的显示
+```go
+type AuthRequest struct {
+	// 如果是表单提交，使用form,否则获取不到数据
+    
+    // 验证邮箱，必填，格式为邮箱
+	Email string `json:"email" binding:"required,email" comment:"邮箱"` 
+    // 验证密码，必填，长度为6~10
+	Pass string `json:"pass" binding:"required,min=6,max=10" comment:"密码"` 
+}
+
+// 在handler里使用
+router.Post("/user/auth", func(ctx *gin.Context) {
+    var req AuthRequest
+    if err := ctx.ShouldBind(&req);err != nil {
+        response.Wrap(ctx).Error(1001,"参数错误:"+err.Error())
+        return
+    } 
+    fmt.Println(req.Pass)
+})
 ```
