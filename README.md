@@ -34,6 +34,34 @@ func main() {
 ```
 用法都很简单，想要了解更多请查看:[gin文档](https://github.com/gin-gonic/gin)
 
+- 输出响应内容
+响应内容都是输出的json格式的数据
+```go
+func DemoHander(ctx *gin.Context) {
+    // 成功的输出: 
+	// data : null
+    response.Wrap(ctx).Success(nil)
+    
+    // data : hello
+    response.Wrap(ctx).Success("hello")
+    
+    // data: {"hello":"world", "age": 1}
+    response.Wrap(ctx).Success(response.Data{
+        "hello":"world",
+        "age": 1,
+    })
+    
+    // 分页输出
+    items := []int{1,2,3,4}
+    // 分页组件，总行数为100,当前页数为1，每页行数为10
+    pagination := paginate.Paginate(100,1,10)
+    response.Wrap(ctx).Paginate(items, &pagination)
+    
+    // 错误的输出
+    response.Wrap(ctx).Error(1001,"错误提示信息，比如用户名参数错误等等")
+}
+```
+
 ### 中间件
 使用中间件的方式嵌入一些非业务的逻辑，使得层次更为清晰，简单。   
 注：如果需要中间件在执行路由前执行，那么中间件的引入需要在定义路由之前。   
