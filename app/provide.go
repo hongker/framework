@@ -34,3 +34,7 @@ func InitDB() error {
 	db = conn
 	return nil
 }
+
+func InitRedis() error  {
+
+}

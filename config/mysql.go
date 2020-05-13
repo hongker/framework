@@ -1,38 +1,24 @@
 package config
 
 import (
-	"fmt"
+	"github.com/spf13/viper"
 	"net"
 	"strconv"
+	"fmt"
 )
-
-// server 服务相关配置
-type server struct {
-	// 服务名称
-	Name string
-
-	// 服务端口
-	Port int
-
-	// http超时时间，单位:秒
-	HttpRequestTimeOut int
-
-	// 全局ID的header名称
-	TraceHeader string
-}
 
 // mysql Mysql的配置项
 type mysql struct {
 	// host
 	Host string
 
-	// port, default 3306
+	// 端口号
 	Port int
 
-	// user, default root
+	// 用户名
 	User string
 
-	// password
+	// 密码
 	Password string
 
 	// 数据库名称
@@ -55,4 +41,19 @@ func (conf mysql) Dsn() string {
 		conf.Password,
 		net.JoinHostPort(conf.Host, strconv.Itoa(conf.Port)),
 		conf.Name)
+}
+
+
+// Mysql 返回mysql配置
+func Mysql() *mysql {
+	return &mysql{
+		Host:               viper.GetString(dbHostKey),
+		Port:               viper.GetInt(dbPortKey),
+		User:               viper.GetString(dbUserKey),
+		Password:           viper.GetString(dbPasswordKey),
+		Name:               viper.GetString(dbNameKey),
+		MaxIdleConnections: viper.GetInt(dbMaxIdleConnectionsKey),
+		MaxOpenConnections: viper.GetInt(dbMaxOpenConnectionsKey),
+		MaxLifeTime:        viper.GetInt(dbMaxLifeTime),
+	}
 }

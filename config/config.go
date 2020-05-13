@@ -58,26 +58,3 @@ func init()  {
 
 }
 
-// Server 返回服务配置
-func Server() *server {
-	return &server{
-		Name:               viper.GetString(serverNameKey),
-		Port:               viper.GetInt(serverPortKey),
-		HttpRequestTimeOut: viper.GetInt(httpRequestTimeoutKey),
-		TraceHeader: viper.GetString(traceHeaderKey),
-	}
-}
-
-// Mysql 返回mysql配置
-func Mysql() *mysql {
-	return &mysql{
-		Host:               viper.GetString(dbHostKey),
-		Port:               viper.GetInt(dbPortKey),
-		User:               viper.GetString(dbUserKey),
-		Password:           viper.GetString(dbPasswordKey),
-		Name:               viper.GetString(dbNameKey),
-		MaxIdleConnections: viper.GetInt(dbMaxIdleConnectionsKey),
-		MaxOpenConnections: viper.GetInt(dbMaxOpenConnectionsKey),
-		MaxLifeTime:        viper.GetInt(dbMaxLifeTime),
-	}
-}
