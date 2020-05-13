@@ -19,7 +19,7 @@ func Permission(ctx *gin.Context)  {
 	// TODO 获取方式待定
 	id := strings.Default(ctx.Query("id"), defaultRole)
 
-	// 根据角色,路由，请求方法校验权限
+	// 根据用户ID,路由，请求方法校验权限
 	hasPermission, err := app.PermissionManager().Enforce(id, ctx.Request.URL.Path, ctx.Request.Method)
 
 	// 程序异常
