@@ -34,7 +34,7 @@ func main() {
 ```
 用法都很简单，想要了解更多请查看:[gin文档](https://github.com/gin-gonic/gin)
 
-- 输出响应内容
+- 输出响应内容    
 响应内容都是输出的json格式的数据
 ```go
 func DemoHander(ctx *gin.Context) {
@@ -62,6 +62,34 @@ func DemoHander(ctx *gin.Context) {
 }
 ```
 
+- 请求参数   
+介绍在`handler`里如何获取请求参数   
+```
+// ctx 为 *gin.Context
+// 获取url上的get参数，如url: /user/info?name=alice
+router.Get("/user/info", func(ctx *gin.Context) {
+    name := ctx.Query("name")
+})
+
+// 获取url的restful参数，如：
+router.Get("/article/:id", func(ctx *gin.Context) {
+    idStr := ctx.Param("id")
+})
+
+// 获取post参数,如果是通过raw的方式提交，用`json`标签，如果是form-data方式提交,则用`form`
+type ArticleCreateRequest struct {
+    Title string `json:"title" form:"json"`
+    Content string `json:"content"`
+}
+router.Get("/article", func(ctx *gin.Context) {
+    var req ArticleCreateRequest
+    if err := ctx.ShouldBind(&req);err != nil {
+        response.Wrap(ctx).Error(1001,"参数错误")
+        return
+    } 
+    fmt.Println(req.Title)
+})
+```
 ### 中间件
 使用中间件的方式嵌入一些非业务的逻辑，使得层次更为清晰，简单。   
 注：如果需要中间件在执行路由前执行，那么中间件的引入需要在定义路由之前。   
