@@ -3,7 +3,7 @@ package errors
 import (
 	"fmt"
 	"net/http"
-	"framework/util/json"
+	"github.com/hongker/framework/util/json"
 )
 
 // Error

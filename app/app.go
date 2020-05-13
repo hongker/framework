@@ -4,8 +4,8 @@
 package app
 
 import (
-	"framework/config"
-	"github.com/casbin/casbin"
+	"github.com/hongker/framework/config"
+	"github.com/casbin/casbin/v2"
 	"github.com/go-redis/redis"
 	"github.com/jinzhu/gorm"
 	"go.uber.org/dig"
@@ -16,6 +16,10 @@ import (
 
 var container = dig.New()
 
+var (
+	db *gorm.DB
+	enforcer *casbin.Enforcer
+)
 // Container 容器
 func Container() *dig.Container {
 	return container
@@ -23,7 +27,7 @@ func Container() *dig.Container {
 
 // DB 返回数据库连接
 func DB() *gorm.DB {
-	return nil
+	return db
 }
 
 // Redis 返回redis连接
@@ -33,7 +37,7 @@ func Redis() redis.Cmdable {
 
 // PermissionManager 返回rbac权限管理器
 func PermissionManager() *casbin.Enforcer {
-	return nil
+	return enforcer
 }
 
 // Http 返回http连接池客户端

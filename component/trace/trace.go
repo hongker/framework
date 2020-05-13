@@ -9,7 +9,7 @@
 package trace
 
 import (
-	"framework/util/strings"
+	"github.com/hongker/framework/util/strings"
 	"github.com/petermattis/goid"
 	"sync"
 )

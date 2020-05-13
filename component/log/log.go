@@ -1,8 +1,8 @@
 package log
 
 import (
-	"framework/component/trace"
-	"framework/config"
+	"github.com/hongker/framework/component/trace"
+	"github.com/hongker/framework/config"
 	"github.com/sirupsen/logrus"
 	"os"
 )

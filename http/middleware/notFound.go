@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"framework/http/response"
+	"github.com/hongker/framework/http/response"
 )
 
 // NotFoundHandler 404

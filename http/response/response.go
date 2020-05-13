@@ -1,9 +1,9 @@
 package response
 
 import (
-	"framework/component/paginate"
-	"framework/component/trace"
-	"framework/util/strings"
+	"github.com/hongker/framework/component/paginate"
+	"github.com/hongker/framework/component/trace"
+	"github.com/hongker/framework/util/strings"
 	"github.com/gin-gonic/gin"
 	"reflect"
 )

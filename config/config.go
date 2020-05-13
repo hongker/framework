@@ -17,33 +17,45 @@ func ReadFromFile(path string) error {
 const(
 	// 服务名称配置项
 	serverNameKey = "server.name"
-	// 服务名称默认值
-	defaultServerName = "app"
 
 	// 服务端口配置项
 	serverPortKey = "server.port"
-	// 服务端口默认值
-	defaultServerPort = 8080
 
 	// http请求超时配置项
-	httpRequestTimeoutKey = "server.http-request-timeout"
-	// http请求超时默认值
-	defaultHttpRequestTimeout = 3
+	httpRequestTimeoutKey = "server.httpRequestTimeout"
 
 	// 全局ID的header配置项
-	traceHeaderKey = "server.trace-header"
+	traceHeaderKey = "server.traceHeader"
 
-	// 全局ID的header默认值
-	defaultTraceHeader = "request-trace"
+	dbHostKey = "db.host"
+	dbPortKey = "db.port"
+	dbUserKey = "db.user"
+	dbPasswordKey = "db.password"
+	dbNameKey = "db.name"
+	dbMaxIdleConnectionsKey = "db.maxIdleConnections"
+	dbMaxOpenConnectionsKey = "db.maxOpenConnections"
+	dbMaxLifeTime = "db.maxLifeTime"
 
 )
 
 // init 初始化默认配置
 func init()  {
-	viper.SetDefault(serverNameKey, defaultServerName)
-	viper.SetDefault(serverPortKey, defaultServerPort)
-	viper.SetDefault(httpRequestTimeoutKey, defaultHttpRequestTimeout)
-	viper.SetDefault(traceHeaderKey, defaultTraceHeader)
+	// 初始化server默认配置
+	viper.SetDefault(serverNameKey, "app")
+	viper.SetDefault(serverPortKey, 8080)
+	viper.SetDefault(httpRequestTimeoutKey, 3)
+	viper.SetDefault(traceHeaderKey, "request-trace")
+
+	// 初始化数据库默认配置
+	viper.SetDefault(dbHostKey, "127.0.0.1")
+	viper.SetDefault(dbPortKey, 3306)
+	viper.SetDefault(dbUserKey, "root")
+	viper.SetDefault(dbPasswordKey, "")
+	viper.SetDefault(dbNameKey, "")
+	viper.SetDefault(dbMaxIdleConnectionsKey, 10)
+	viper.SetDefault(dbMaxOpenConnectionsKey, 40)
+	viper.SetDefault(dbMaxLifeTime, 10)
+
 }
 
 // Server 返回服务配置
@@ -53,5 +65,19 @@ func Server() *server {
 		Port:               viper.GetInt(serverPortKey),
 		HttpRequestTimeOut: viper.GetInt(httpRequestTimeoutKey),
 		TraceHeader: viper.GetString(traceHeaderKey),
+	}
+}
+
+// Mysql 返回mysql配置
+func Mysql() *mysql {
+	return &mysql{
+		Host:               viper.GetString(dbHostKey),
+		Port:               viper.GetInt(dbPortKey),
+		User:               viper.GetString(dbUserKey),
+		Password:           viper.GetString(dbPasswordKey),
+		Name:               viper.GetString(dbNameKey),
+		MaxIdleConnections: viper.GetInt(dbMaxIdleConnectionsKey),
+		MaxOpenConnections: viper.GetInt(dbMaxOpenConnectionsKey),
+		MaxLifeTime:        viper.GetInt(dbMaxLifeTime),
 	}
 }

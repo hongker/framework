@@ -1,7 +1,7 @@
 package log
 
 import (
-	"framework/component/trace"
+	"github.com/hongker/framework/component/trace"
 	"testing"
 )
 

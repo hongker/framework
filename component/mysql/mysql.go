@@ -1,8 +1,10 @@
 package mysql
 
 import (
-	"framework/errors"
+	"github.com/hongker/framework/config"
+	"github.com/hongker/framework/errors"
 	"github.com/jinzhu/gorm"
+	"time"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -14,6 +16,14 @@ func Connect(dsn string) (*gorm.DB, error) {
 	if err != nil {
 		return nil, errors.MysqlConnectFailed("%s", err.Error())
 	}
+
+	conf := config.Mysql()
+	// 连接池配置
+	conn.DB().SetMaxIdleConns(conf.MaxIdleConnections)
+	conn.DB().SetMaxOpenConns(conf.MaxOpenConnections)
+
+	// 超时时间配置
+	conn.DB().SetConnMaxLifetime(time.Duration(conf.MaxLifeTime) * time.Second)
 
 	return conn, nil
 }

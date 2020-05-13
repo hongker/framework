@@ -1,7 +1,7 @@
 package redis
 
 import (
-	"framework/errors"
+	"github.com/hongker/framework/errors"
 	"github.com/go-redis/redis"
 )
 

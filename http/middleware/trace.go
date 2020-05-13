@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"framework/component/trace"
-	"framework/config"
+	"github.com/hongker/framework/component/trace"
+	"github.com/hongker/framework/config"
 	"github.com/gin-gonic/gin"
 	"strings"
 )

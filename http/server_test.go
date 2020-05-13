@@ -2,7 +2,7 @@ package http
 
 import (
 	"fmt"
-	"framework/http/response"
+	"github.com/hongker/framework/http/response"
 	"github.com/gin-gonic/gin"
 	"testing"
 )

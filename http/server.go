@@ -1,8 +1,8 @@
 package http
 
 import (
-	"framework/config"
-	"framework/http/middleware"
+	"github.com/hongker/framework/config"
+	"github.com/hongker/framework/http/middleware"
 	"github.com/gin-gonic/gin"
 	"net"
 	"strconv"

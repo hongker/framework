@@ -2,6 +2,7 @@
 提供快捷的运行web项目的golang脚手架
 
 ## 安装
+暂时使用github放置，后续转成私有
 ```
 go get github.com/hongker/framework
 ```

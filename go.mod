@@ -1,9 +1,9 @@
-module framework
+module github.com/hongker/framework
 
 go 1.14
 
 require (
-	github.com/casbin/casbin v1.9.1
+	github.com/casbin/casbin/v2 v2.4.1
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-openapi/spec v0.19.7 // indirect

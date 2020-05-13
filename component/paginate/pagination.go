@@ -3,7 +3,7 @@
 package paginate
 
 import (
-	"framework/util/number"
+	"github.com/hongker/framework/util/number"
 )
 
 // Pagination 分页
