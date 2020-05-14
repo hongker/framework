@@ -50,7 +50,6 @@ func InitDB() error {
 	}
 
 	db = conn
-	db.LogMode(true)
 
 	return nil
 }
