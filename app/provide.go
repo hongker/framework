@@ -6,7 +6,14 @@ import (
 	"github.com/hongker/framework/component/mysql"
 	"github.com/hongker/framework/component/rbac"
 	"github.com/hongker/framework/config"
+	"github.com/jinzhu/gorm"
+	"time"
 )
+
+const(
+	mysqlDialectType = "mysql"
+)
+
 
 // InitPermissionManager 初始化权限管理器
 func InitPermissionManager(adapter persist.Adapter) error {
@@ -25,16 +32,32 @@ func InitPermissionManager(adapter persist.Adapter) error {
 
 // InitDB 初始化DB
 func InitDB() error {
-	dsn := config.Mysql().Dsn()
-	conn, err := mysql.Connect(dsn)
+	dataSourceItems := config.Mysql().DataSourceItems()
+
+	adapter, err := mysql.NewReadWriteAdapter(mysqlDialectType, dataSourceItems)
 	if err != nil {
 		return err
 	}
-	
+
+
+	adapter.SetMaxIdleConns(config.Mysql().MaxIdleConnections)
+	adapter.SetMaxOpenConns(config.Mysql().MaxOpenConnections)
+	adapter.SetConnMaxLifetime(time.Duration(config.Mysql().MaxLifeTime) * time.Second)
+
+	conn, err := gorm.Open(mysqlDialectType, adapter)
+	if err != nil {
+		return err
+	}
+
 	db = conn
+	db.LogMode(true)
+
 	return nil
 }
 
-func InitRedis() error  {
 
+// InitRedis
+func InitRedis() error  {
+	// TODO 连接redis
+	return nil
 }

@@ -4,6 +4,9 @@ import "github.com/spf13/viper"
 
 // server 服务相关配置
 type server struct {
+	// 运行环境
+	RunMode string
+
 	// 服务名称
 	Name string
 
@@ -17,10 +20,10 @@ type server struct {
 	TraceHeader string
 }
 
-
 // Server 返回服务配置
 func Server() *server {
 	return &server{
+		RunMode: viper.GetString(runModeKey),
 		Name:               viper.GetString(serverNameKey),
 		Port:               viper.GetInt(serverPortKey),
 		HttpRequestTimeOut: viper.GetInt(httpRequestTimeoutKey),

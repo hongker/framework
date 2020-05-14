@@ -137,7 +137,6 @@ func init() {
 func main() {
     // 读取配置
 }
-
 ```
 
 - 初始化配置
@@ -153,6 +152,44 @@ func init() {
 }
 ```
 
+- 系统配置说明
+支持多环境配置
+```
+server:
+  runmode: local # 运行环境
+  name : activity # 项目名称
+  port : 8085 #端口号
+
+local:  # 本地运行环境的配置
+  db:     # mysql数据库配置，支持读写分离，第一个默认为写库
+    maxIdleConnections: 10    # 连接池配置
+    maxOpenConnections: 40
+    maxLifeTime: 10
+    dsn:    # 数据库连接
+    - host : 127.0.0.1
+      port : 3306
+      user : root
+      password : 123456
+      name : activity
+
+dev:
+  db:     # mysql数据库配置，支持读写分离，第一个默认为写库
+    maxIdleConnections: 10    # 连接池配置
+    maxOpenConnections: 40
+    maxLifeTime: 10
+    dsn:    # 数据库连接
+      - host: 127.0.0.1   # 写库
+        port: 3306
+        user: root
+        password: 123456
+        name: activity
+      - host: 127.0.0.2   # 从库
+        port: 3306
+        user: root
+        password: 123456
+        name: activity
+```
+
 - 读取配置
 ```go
 // 简单的读取
@@ -166,7 +203,7 @@ someIntConfig := viper.GetInt("someIntKey")
 ### 基础服务
 基于`github.com/uber/dig`的依赖注入模式，通过统一的`app`模块管理如mysql连接，redis连接等全局变量。
 #### 数据库
-集成业界好评且强大的`github.com/jinzhu/gorm`,实现对mysql数据的操作。
+集成业界好评且强大的`github.com/jinzhu/gorm`,实现对mysql数据的操作。支持读写分离，在配置文件中配置多个连接即可。
 ```go
 // 在成功加载配置后，初始化数据库连接,连接失败时panic
 secure.Panic(app.InitDB())
