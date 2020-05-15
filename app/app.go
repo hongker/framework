@@ -19,6 +19,7 @@ var container = dig.New()
 var (
 	db *gorm.DB
 	enforcer *casbin.Enforcer
+	redisConn redis.Cmdable
 )
 // Container 容器
 func Container() *dig.Container {
@@ -32,7 +33,7 @@ func DB() *gorm.DB {
 
 // Redis 返回redis连接
 func Redis() redis.Cmdable {
-	return nil
+	return redisConn
 }
 
 // PermissionManager 返回rbac权限管理器

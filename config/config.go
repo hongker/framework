@@ -42,6 +42,14 @@ const(
 
 	dbDataSourcesKey = "db.dsn"
 
+	// 应用日志名称
+	appKey = "app"
+
+	redisHost = "redis.host"
+	redisPass = "redis.pass"
+	redisPort = "redis.port"
+	redisCluster = "redis.cluster"
+
 )
 
 // GetKeyWithRunMode 根据运行环境获取key
@@ -70,5 +78,10 @@ func init()  {
 	//viper.SetDefault(dbMaxOpenConnectionsKey, 40)
 	//viper.SetDefault(dbMaxLifeTime, 10)
 
+}
+
+// UnmarshalAppConfig 解析app配置
+func UnmarshalAppConfig(obj interface{}) error {
+	return viper.UnmarshalKey(appKey, obj)
 }
 

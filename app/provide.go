@@ -5,9 +5,11 @@ import (
 	"github.com/casbin/casbin/v2/persist"
 	"github.com/hongker/framework/component/mysql"
 	"github.com/hongker/framework/component/rbac"
+	"github.com/hongker/framework/component/redis"
 	"github.com/hongker/framework/config"
 	"github.com/jinzhu/gorm"
 	"time"
+	goredis "github.com/go-redis/redis"
 )
 
 const(
@@ -55,8 +57,20 @@ func InitDB() error {
 }
 
 
-// InitRedis
-func InitRedis() error  {
+// InitRedisCluster 初始化redis集群
+func InitRedisCluster() error  {
 	// TODO 连接redis
+	rdb, err := redis.Connect(&goredis.Options{
+		Addr: config.Redis().Cluster,
+	})
+	if err != nil {
+		return err
+	}
+
+	if err := rdb.Ping().Err(); err != nil {
+		return err
+	}
+
+	redisConn = rdb
 	return nil
 }

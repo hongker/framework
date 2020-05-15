@@ -2,6 +2,7 @@ package config
 
 import (
 	goredis "github.com/go-redis/redis"
+	"github.com/spf13/viper"
 	"net"
 	"strconv"
 	"time"
@@ -26,6 +27,8 @@ type redis struct {
 
 	// 超时时间
 	IdleTimeout time.Duration
+	
+	Cluster string
 }
 
 // Options get redis options
@@ -38,5 +41,18 @@ func (conf *redis) Options() *goredis.Options {
 		PoolSize:    conf.PoolSize,
 		MaxRetries:  conf.MaxRetries,
 		IdleTimeout: conf.IdleTimeout,
+	}
+}
+
+// Redis 获取redis配置
+func Redis() *redis {
+	return &redis{
+		Host:        viper.GetString(GetKeyWithRunMode(redisHost)),
+		Port:        viper.GetInt(GetKeyWithRunMode(redisPort)),
+		Auth:        viper.GetString(GetKeyWithRunMode(redisPass)),
+		PoolSize:    10,
+		MaxRetries:  3,
+		IdleTimeout: 3,
+		Cluster:     viper.GetString(GetKeyWithRunMode(redisCluster)),
 	}
 }

@@ -65,6 +65,7 @@ type wrapper struct {
 
 // Wrap
 func Wrap(ctx *gin.Context) *wrapper  {
+	// TODO 实现pool池，减少GC
 	return &wrapper{
 		ctx: ctx,
 	}
@@ -72,6 +73,7 @@ func Wrap(ctx *gin.Context) *wrapper  {
 
 // newResponse 构造一个Response
 func newResponse(code int, message string) Response  {
+	// TODO pool池，减少GC
 	return Response{
 		Message: message,
 		Code:    code,
