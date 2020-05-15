@@ -3,13 +3,13 @@ package app
 import (
 	"fmt"
 	"github.com/casbin/casbin/v2/persist"
+	goredis "github.com/go-redis/redis"
 	"github.com/hongker/framework/component/mysql"
 	"github.com/hongker/framework/component/rbac"
 	"github.com/hongker/framework/component/redis"
 	"github.com/hongker/framework/config"
 	"github.com/jinzhu/gorm"
 	"time"
-	goredis "github.com/go-redis/redis"
 )
 
 const(

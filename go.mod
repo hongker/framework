@@ -13,12 +13,14 @@ require (
 	github.com/go-playground/validator/v10 v10.2.0
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/golang/protobuf v1.4.1 // indirect
+	github.com/gorilla/sessions v1.2.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/magiconair/properties v1.8.1
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/olivere/elastic/v7 v7.0.15 // indirect
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5
+	github.com/rbcervilla/redisstore v1.1.0
 	github.com/robfig/cron v1.2.0 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.6.0
