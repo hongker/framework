@@ -260,3 +260,58 @@ router.Post("/user/auth", func(ctx *gin.Context) {
     fmt.Println(req.Pass)
 })
 ```
+
+### Session
+实现基于文件存储和redis存储的session组件.注:session和Request，Writer关联，故最好是放在接口层获取或保存。
+
+- 文件存储   
+```go
+store := session.NewCookieStore("userState")
+// 添加路由
+server.Router.GET("/login", func(ctx *gin.Context) {
+    // 获取一个key为user的session
+	s , _ := store.Get(ctx.Request, "user")
+    // 指定元素name的值
+	s.Values["name"] = ctx.Query("name")
+    // 保存session
+	if err := s.Save(ctx.Request, ctx.Writer); err != nil {
+		response.Wrap(ctx).Error(500, "login failed")
+		return
+	}
+	response.Wrap(ctx).Success(response.Data{
+		"hello":"world",
+	})
+})
+server.Router.GET("/user", func(ctx *gin.Context) {
+    // 读取session
+	s , _ := store.Get(ctx.Request, "user")
+	fmt.Println(s.Values)
+})
+```
+
+- Redis存储   
+很多情况下，服务都是以分布式的方式部署，文件存储并不适用于该场景，需要借助Redis实现。
+```go
+redisStore, err := session.NewRedisStore()
+secure.Panic(err)
+server.Router.GET("/redis/login", func(ctx *gin.Context) {
+    // 获取一个key为user的session
+	s , _ := redisStore.Get(ctx.Request, "user")
+    // 赋值
+	s.Values["name"] = ctx.Query("name")
+    // 保存
+	if err := s.Save(ctx.Request, ctx.Writer); err != nil {
+		response.Wrap(ctx).Error(500, "login failed")
+		return
+	}
+	response.Wrap(ctx).Success(response.Data{
+		"hello":"world",
+	})
+})
+
+server.Router.GET("/redis/user", func(ctx *gin.Context) {
+    // 读取session
+	s , _ := redisStore.Get(ctx.Request, "user")
+	fmt.Println(s.Values)
+})
+```
