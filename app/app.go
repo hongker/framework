@@ -20,7 +20,6 @@ var (
 	db *gorm.DB
 	enforcer *casbin.Enforcer
 	redisConn redis.UniversalClient
-
 )
 // Container 容器
 func Container() *dig.Container {

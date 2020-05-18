@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 	"github.com/casbin/casbin/v2/persist"
-	goredis "github.com/go-redis/redis"
 	"github.com/hongker/framework/component/mysql"
 	"github.com/hongker/framework/component/rbac"
 	"github.com/hongker/framework/component/redis"
@@ -57,12 +56,10 @@ func InitDB() error {
 }
 
 
-// InitRedisCluster 初始化redis集群
-func InitRedisCluster() error  {
-	// TODO 连接redis
-	rdb, err := redis.Connect(&goredis.Options{
-		Addr: config.Redis().Cluster,
-	})
+
+// InitRedis 初始化redis
+func InitRedis() error  {
+	rdb, err := redis.Connect(config.Redis().Options())
 	if err != nil {
 		return err
 	}

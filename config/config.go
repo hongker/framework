@@ -46,6 +46,7 @@ const(
 	appKey = "app"
 
 	redisHost = "redis.host"
+	redisDB = "redis.db"
 	redisPass = "redis.pass"
 	redisPort = "redis.port"
 	redisCluster = "redis.cluster"

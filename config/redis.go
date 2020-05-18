@@ -19,6 +19,9 @@ type redis struct {
 	// 密码
 	Auth string
 
+	// db
+	DB int
+
 	// 连接池大小
 	PoolSize int
 
@@ -41,6 +44,7 @@ func (conf *redis) Options() *goredis.Options {
 		PoolSize:    conf.PoolSize,
 		MaxRetries:  conf.MaxRetries,
 		IdleTimeout: conf.IdleTimeout,
+		DB: conf.DB,
 	}
 }
 
@@ -50,6 +54,7 @@ func Redis() *redis {
 		Host:        viper.GetString(GetKeyWithRunMode(redisHost)),
 		Port:        viper.GetInt(GetKeyWithRunMode(redisPort)),
 		Auth:        viper.GetString(GetKeyWithRunMode(redisPass)),
+		DB : viper.GetInt(GetKeyWithRunMode(redisDB)),
 		PoolSize:    10,
 		MaxRetries:  3,
 		IdleTimeout: 3,
