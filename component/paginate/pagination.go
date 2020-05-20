@@ -20,7 +20,7 @@ type Pagination struct {
 
 const (
 	// 默认的每页行数
-	defaultLimit       = 10
+	defaultLimit = 10
 	// 默认的当前页数
 	defaultCurrentPage = 1
 )
@@ -29,7 +29,7 @@ const (
 func Paginate(totalCount, currentPage, limit int) Pagination {
 	pagination := Pagination{
 		PageNo: currentPage,
-		Limit: limit,
+		Limit:  limit,
 	}
 
 	// 设置默认条数,后期改为可配置

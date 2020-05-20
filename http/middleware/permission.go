@@ -1,20 +1,20 @@
 package middleware
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/hongker/framework/app"
 	"github.com/hongker/framework/http/response"
 	"github.com/hongker/framework/util/strings"
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-const(
+const (
 	// 默认角色
 	defaultRole = "1"
 )
 
 // Permission 权限校验中间件
-func Permission(ctx *gin.Context)  {
+func Permission(ctx *gin.Context) {
 	// 获取UID
 	// TODO 获取方式待定
 	id := strings.Default(ctx.Query("id"), defaultRole)
@@ -37,4 +37,3 @@ func Permission(ctx *gin.Context)  {
 
 	ctx.Next()
 }
-

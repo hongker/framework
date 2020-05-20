@@ -1,10 +1,10 @@
 package config
 
 import (
+	"fmt"
 	"github.com/spf13/viper"
 	"net"
 	"strconv"
-	"fmt"
 )
 
 // mysql Mysql的配置项
@@ -60,11 +60,10 @@ func (conf DataSource) Dsn() string {
 		conf.Name)
 }
 
-
 // Mysql 返回mysql配置
 func Mysql() *mysql {
 	return &mysql{
-		DataSources: dsn(),
+		DataSources:        dsn(),
 		MaxIdleConnections: viper.GetInt(GetKeyWithRunMode(dbMaxIdleConnectionsKey)),
 		MaxOpenConnections: viper.GetInt(GetKeyWithRunMode(dbMaxOpenConnectionsKey)),
 		MaxLifeTime:        viper.GetInt(GetKeyWithRunMode(dbMaxLifeTime)),

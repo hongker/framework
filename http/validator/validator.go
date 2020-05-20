@@ -19,7 +19,7 @@ import (
 	"sync"
 )
 
-const(
+const (
 	// 指定校验规则的tag
 	validateTag = "binding"
 

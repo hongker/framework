@@ -14,7 +14,7 @@ import (
 	"sync"
 )
 
-const(
+const (
 	// 前缀，用于区分id类型
 	tracePrefix = "trace:"
 )
@@ -24,7 +24,7 @@ var (
 	traceIds = map[int64]string{}
 
 	// 读写锁，保证线程安全
-	rwm      sync.RWMutex
+	rwm sync.RWMutex
 )
 
 // NewUUID 新生成一个全局的唯一ID

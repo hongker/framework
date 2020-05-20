@@ -11,22 +11,21 @@ import (
 	"time"
 )
 
-const(
+const (
 	mysqlDialectType = "mysql"
 )
-
 
 // InitPermissionManager 初始化权限管理器
 func InitPermissionManager(adapter persist.Adapter) error {
 	if db == nil {
 		return fmt.Errorf("database not init")
 	}
-	
+
 	e, err := rbac.NewManagerWithAdapter(adapter)
 	if err != nil {
 		return nil
 	}
-	
+
 	enforcer = e
 	return nil
 }
@@ -39,7 +38,6 @@ func InitDB() error {
 	if err != nil {
 		return err
 	}
-
 
 	adapter.SetMaxIdleConns(config.Mysql().MaxIdleConnections)
 	adapter.SetMaxOpenConns(config.Mysql().MaxOpenConnections)
@@ -55,10 +53,8 @@ func InitDB() error {
 	return nil
 }
 
-
-
 // InitRedis 初始化redis
-func InitRedis() error  {
+func InitRedis() error {
 	rdb, err := redis.Connect(config.Redis().Options())
 	if err != nil {
 		return err

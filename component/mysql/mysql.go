@@ -9,7 +9,6 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-
 // Connect 连接数据库，返回连接与错误
 func Connect(dialectType, dsn string) (*gorm.DB, error) {
 	conn, err := gorm.Open(dialectType, dsn)
@@ -28,4 +27,3 @@ func Connect(dialectType, dsn string) (*gorm.DB, error) {
 
 	return conn, nil
 }
-

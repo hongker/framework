@@ -1,4 +1,5 @@
 package middleware
+
 import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -10,7 +11,6 @@ import (
 var url = ginSwagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
 
 // SwaggerHandler
-func SwaggerHandler() gin.HandlerFunc  {
+func SwaggerHandler() gin.HandlerFunc {
 	return ginSwagger.WrapHandler(swaggerFiles.Handler, url)
 }
-

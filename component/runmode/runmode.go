@@ -1,6 +1,6 @@
 package runmode
 
-const(
+const (
 	// 本地环境
 	Local = "local"
 

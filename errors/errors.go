@@ -2,19 +2,19 @@ package errors
 
 import (
 	"fmt"
-	"net/http"
 	"github.com/hongker/framework/util/json"
+	"net/http"
 )
 
 // Error
 type Error struct {
 	// error code
-	Code    int    `json:"code"`
+	Code int `json:"code"`
 	// error message
 	Message string `json:"message"`
 }
 
-const(
+const (
 	MysqlConnectFailedCode = 1001
 	RedisConnectFailedCode = 1002
 )
@@ -26,7 +26,7 @@ func (e *Error) Error() string {
 }
 
 // New
-func New( code int, message string) *Error {
+func New(code int, message string) *Error {
 	return &Error{
 		Code:    code,
 		Message: message,

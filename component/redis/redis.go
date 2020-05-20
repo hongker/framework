@@ -1,8 +1,8 @@
 package redis
 
 import (
-	"github.com/hongker/framework/errors"
 	"github.com/go-redis/redis"
+	"github.com/hongker/framework/errors"
 )
 
 // Connect 连接redis单机,返回连接与错误信息
@@ -17,7 +17,7 @@ func Connect(option *redis.Options) (*redis.Client, error) {
 }
 
 // ConnectCluster 连接redis集群，返回连接与错误信息
-func ConnectCluster(option *redis.ClusterOptions) (*redis.ClusterClient, error)  {
+func ConnectCluster(option *redis.ClusterOptions) (*redis.ClusterClient, error) {
 	rdb := redis.NewClusterClient(option)
 
 	if err := rdb.Ping().Err(); err != nil {

@@ -13,7 +13,7 @@ func Recover(ctx *gin.Context) {
 			response.Wrap(ctx).Error(500, "System Error")
 
 			log.Error("Recover", log.Content{
-				"param": r,
+				"param":      r,
 				"trace_info": "", // 记录触发错误的调用链路
 			})
 		}

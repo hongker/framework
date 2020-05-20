@@ -5,9 +5,10 @@ import (
 	"testing"
 )
 
-func TestMain(m *testing.M)  {
+func TestMain(m *testing.M) {
 	m.Run()
 }
+
 // TestInfo 测试Info
 func TestInfo(t *testing.T) {
 	trace.Set(trace.NewUUID())

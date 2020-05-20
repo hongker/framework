@@ -59,7 +59,7 @@ func Execute(req *http.Request) (string, error) {
 // Get 发送get请求
 // url: 请求地址
 // headers: 头部信息，比如: Content-Type:application/json，或者自定义的token字段等等。如果不需要传nil
-func Get(url string, headers map[string]string) (string, error)  {
+func Get(url string, headers map[string]string) (string, error) {
 	req, err := NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return "", err
@@ -93,7 +93,5 @@ func Post(url string, data interface{}, headers map[string]string) (string, erro
 		req.Header.Set(key, value)
 	}
 
-
 	return Execute(req)
 }
-

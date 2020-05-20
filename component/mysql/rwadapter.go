@@ -12,7 +12,7 @@ import (
 // ReadWriteAdapter 读写分离适配器
 type ReadWriteAdapter struct {
 	// Physical databases
-	pdbs  []*sql.DB
+	pdbs []*sql.DB
 
 	// Monotonically incrementing counter on each query
 	count uint64
@@ -110,7 +110,6 @@ func (adapter ReadWriteAdapter) Ping() error {
 	})
 }
 
-
 // scatter 通过协程与通道实现异步执行
 func (adapter ReadWriteAdapter) scatter(n int, fn func(i int) error) error {
 	errors := make(chan error, n)
@@ -130,8 +129,6 @@ func (adapter ReadWriteAdapter) scatter(n int, fn func(i int) error) error {
 	return err
 }
 
-
-
 // NewReadWriteAdapter 通过多个dsn打开多个实例的连接
 // Open concurrently opens each underlying physical db.
 // dataSourceNames must be a semi-comma separated list of DSNs with the first
@@ -148,8 +145,6 @@ func NewReadWriteAdapter(dialectType string, dataSourceNames []string) (*ReadWri
 			return nil, err
 		}
 	}
-
-
 
 	return adapter, nil
 }

@@ -6,7 +6,7 @@ import (
 )
 
 // TestTrace
-func TestTrace(t *testing.T)  {
+func TestTrace(t *testing.T) {
 	uuid := NewUUID()
 	Set(uuid)
 	defer GC()
@@ -19,14 +19,14 @@ func BenchmarkGet(b *testing.B) {
 	uuid := NewUUID()
 	Set(uuid)
 	defer GC()
-	for i:=0; i<b.N;i++ {
+	for i := 0; i < b.N; i++ {
 		Get()
 	}
 }
 
 // BenchmarkSet 压测Set
 func BenchmarkSet(b *testing.B) {
-	for i:=0; i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		uuid := NewUUID()
 		Set(uuid)
 	}

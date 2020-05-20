@@ -23,10 +23,10 @@ type server struct {
 // Server 返回服务配置
 func Server() *server {
 	return &server{
-		RunMode: viper.GetString(runModeKey),
+		RunMode:            viper.GetString(runModeKey),
 		Name:               viper.GetString(serverNameKey),
 		Port:               viper.GetInt(serverPortKey),
 		HttpRequestTimeOut: viper.GetInt(httpRequestTimeoutKey),
-		TraceHeader: viper.GetString(traceHeaderKey),
+		TraceHeader:        viper.GetString(traceHeaderKey),
 	}
 }

@@ -8,7 +8,7 @@ import (
 )
 
 // rbacModel 定义基于角色的rbac模型
-const rbacModel =`
+const rbacModel = `
 [request_definition]
 r = sub, obj, act
 

@@ -19,7 +19,7 @@ const (
 
 // NewAdapter 生成一个bytes适配器
 func NewAdapter() *Adapter {
-	return &Adapter{pool:sync.Pool{New: func() interface{} {
+	return &Adapter{pool: sync.Pool{New: func() interface{} {
 		return bytes.NewBuffer(make([]byte, adapterBufferPoolSize))
 	}}}
 }

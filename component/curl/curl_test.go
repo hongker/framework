@@ -24,10 +24,10 @@ func TestGet(t *testing.T) {
 
 func TestPost(t *testing.T) {
 	data := map[string]interface{}{
-		"id": 1,
-		"name":"test01",
+		"id":   1,
+		"name": "test01",
 	}
-	resp, err := Post("http://baidu.com", data, map[string]string{"Content-Type":"application/json"})
+	resp, err := Post("http://baidu.com", data, map[string]string{"Content-Type": "application/json"})
 	assert.Nil(t, err)
 	fmt.Println(resp)
 

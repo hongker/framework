@@ -4,9 +4,9 @@
 package app
 
 import (
-	"github.com/hongker/framework/config"
 	"github.com/casbin/casbin/v2"
 	"github.com/go-redis/redis"
+	"github.com/hongker/framework/config"
 	"github.com/jinzhu/gorm"
 	"go.uber.org/dig"
 	"net"
@@ -17,10 +17,11 @@ import (
 var container = dig.New()
 
 var (
-	db *gorm.DB
-	enforcer *casbin.Enforcer
+	db        *gorm.DB
+	enforcer  *casbin.Enforcer
 	redisConn redis.UniversalClient
 )
+
 // Container 容器
 func Container() *dig.Container {
 	return container
@@ -42,8 +43,8 @@ func PermissionManager() *casbin.Enforcer {
 }
 
 // Http 返回http连接池客户端
-func Http() (client *http.Client)  {
-	if err :=  container.Invoke(func(cli *http.Client) {
+func Http() (client *http.Client) {
+	if err := container.Invoke(func(cli *http.Client) {
 		client = cli
 	}); err != nil {
 		client = &http.Client{

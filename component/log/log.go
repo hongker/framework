@@ -4,6 +4,7 @@ import (
 	"github.com/hongker/framework/component/trace"
 	"github.com/hongker/framework/config"
 	"github.com/sirupsen/logrus"
+	"io"
 	"os"
 )
 
@@ -25,17 +26,27 @@ type Content map[string]interface{}
 // log 返回日志实例
 func log() *logrus.Entry {
 	return logrus.WithField("system", Content{
-		"trace_id" : trace.Get(),
-		"system_name" : config.Server().Name,
+		"trace_id":    trace.Get(),
+		"system_name": config.Server().Name,
 	})
 }
 
 // Info 信息
-func Info(msg string, content Content)  {
+func Info(msg string, content Content) {
 	log().WithField("content", content).Info(msg)
 }
 
 // Error 错误
-func Error(msg string, content Content)  {
+func Error(msg string, content Content) {
 	log().WithField("content", content).Error(msg)
+}
+
+// Debug 调试
+func Debug(msg string, content Content) {
+	log().WithField("content", content).Debug(msg)
+}
+
+// SetOutput 指定日志输出
+func SetOutput(out io.Writer)  {
+	logrus.SetOutput(out)
 }

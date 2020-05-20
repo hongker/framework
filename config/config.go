@@ -6,8 +6,6 @@ import (
 	"strings"
 )
 
-
-
 // ReadFromEnvironment 读取环境变量
 func ReadFromEnvironment() {
 	viper.AutomaticEnv()
@@ -21,7 +19,7 @@ func ReadFromFile(path string) error {
 	return viper.ReadInConfig()
 }
 
-const(
+const (
 	// 运行环境，沿用beego的吧，懒得改了
 	runModeKey = "server.runmode"
 	// 服务名称配置项
@@ -38,29 +36,27 @@ const(
 
 	dbMaxIdleConnectionsKey = "db.maxIdleConnections"
 	dbMaxOpenConnectionsKey = "db.maxOpenConnections"
-	dbMaxLifeTime = "db.maxLifeTime"
+	dbMaxLifeTime           = "db.maxLifeTime"
 
 	dbDataSourcesKey = "db.dsn"
 
 	// 应用日志名称
 	appKey = "app"
 
-	redisHost = "redis.host"
-	redisDB = "redis.db"
-	redisPass = "redis.pass"
-	redisPort = "redis.port"
+	redisHost    = "redis.host"
+	redisDB      = "redis.db"
+	redisPass    = "redis.pass"
+	redisPort    = "redis.port"
 	redisCluster = "redis.cluster"
-
 )
 
 // GetKeyWithRunMode 根据运行环境获取key
-func GetKeyWithRunMode(key string) string  {
+func GetKeyWithRunMode(key string) string {
 	return strings.Join([]string{viper.GetString(runModeKey), key}, ".")
 }
 
-
 // init 初始化默认配置
-func init()  {
+func init() {
 	// 默认环境为本地环境
 	viper.SetDefault(runModeKey, runmode.Local)
 	// 初始化server默认配置
@@ -85,4 +81,3 @@ func init()  {
 func UnmarshalAppConfig(obj interface{}) error {
 	return viper.UnmarshalKey(appKey, obj)
 }
-

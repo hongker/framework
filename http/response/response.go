@@ -1,14 +1,14 @@
 package response
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/hongker/framework/component/paginate"
 	"github.com/hongker/framework/component/trace"
 	"github.com/hongker/framework/util/strings"
-	"github.com/gin-gonic/gin"
 	"reflect"
 )
 
-const(
+const (
 	// 请求ID前缀
 	requestPrefix = "request:"
 	// 成功提示信息
@@ -33,19 +33,19 @@ type Response struct {
 	Meta Meta `json:"meta"`
 }
 
-
 // requestId
-func requestId() string  {
+func requestId() string {
 	return requestPrefix + strings.UUID()
 }
 
 // meta
 func meta() Meta {
 	return Meta{
-		RequestId:  requestId(),
-		TraceId:  trace.Get(),
+		RequestId: requestId(),
+		TraceId:   trace.Get(),
 	}
 }
+
 // Meta 元数据
 type Meta struct {
 	// 请求ID
@@ -57,14 +57,13 @@ type Meta struct {
 	Pagination *paginate.Pagination `json:"pagination"`
 }
 
-
 // wrapper context装饰器
 type wrapper struct {
 	ctx *gin.Context
 }
 
 // Wrap
-func Wrap(ctx *gin.Context) *wrapper  {
+func Wrap(ctx *gin.Context) *wrapper {
 	// TODO 实现pool池，减少GC
 	return &wrapper{
 		ctx: ctx,
@@ -72,15 +71,15 @@ func Wrap(ctx *gin.Context) *wrapper  {
 }
 
 // newResponse 构造一个Response
-func newResponse(code int, message string) Response  {
+func newResponse(code int, message string) Response {
 	// TODO pool池，减少GC
 	return Response{
 		Message: message,
 		Code:    code,
 		Data:    nil,
-		Meta:    Meta{
+		Meta: Meta{
 			RequestId:  requestId(),
-			TraceId:  trace.Get(),
+			TraceId:    trace.Get(),
 			Pagination: nil,
 		},
 	}
@@ -92,7 +91,7 @@ func (w *wrapper) output(response Response) {
 }
 
 // Success 输出成功响应
-func (w *wrapper) Success(data interface{})  {
+func (w *wrapper) Success(data interface{}) {
 	response := newResponse(0, successMessage)
 	response.Data = data
 
@@ -100,7 +99,7 @@ func (w *wrapper) Success(data interface{})  {
 }
 
 // Error 输出错误响应
-func (w *wrapper) Error(code int, message string)  {
+func (w *wrapper) Error(code int, message string) {
 	response := newResponse(code, message)
 
 	w.output(response)
