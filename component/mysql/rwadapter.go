@@ -6,6 +6,7 @@ package mysql
 import (
 	"context"
 	"database/sql"
+	"github.com/hongker/framework/util/number"
 	"time"
 )
 
@@ -67,7 +68,11 @@ func (adapter ReadWriteAdapter) Slave() *sql.DB {
 		return adapter.Master()
 	}
 
-	return adapter.pdbs[1]
+	index := 1
+	if adapter.count > 2 {
+		index = number.RandInt(1, int(adapter.count))
+	}
+	return adapter.pdbs[index]
 }
 
 // SetMaxIdleConns sets the maximum number of connections in the idle

@@ -1,6 +1,10 @@
 package number
 
-import "math"
+import (
+	"math"
+	"math/rand"
+	"time"
+)
 
 //Min return min number
 func Min(a, b int) int {
@@ -36,4 +40,10 @@ func Div(a, b int) int {
 // Round rounding-off method
 func Round(f float64) int {
 	return int(math.Floor(f + 0.5))
+}
+
+// RandInt 取随机数
+func RandInt(min, max int) int {
+	rand.Seed(time.Now().UnixNano())
+	return min + rand.Intn(max-min)
 }
