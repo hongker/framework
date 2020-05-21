@@ -119,6 +119,11 @@ server.Router.Group("user").Use(middleware.Permission)
 server.Router.Get("/money", handler.MoneyHandler).Use(middleware.Permission)
 ```
 
+- RequestLog 请求日志中间件   
+记录请求日志，包括请求header,body，响应body，以及接口消耗的时间等。
+```go
+server.Router.Use(middleware.RequestLog)
+```
 
 ### Swagger接口文档生成
 集成了`github.com/swaggo/gin-swagger`,通过注解自动生成接口文档，使用方式请查看:[gin-swagger文档](https://github.com/swaggo/gin-swagger)
@@ -223,6 +228,7 @@ app.DB()
 基于`github.com/sirupsen/logrus`实现的日志组件
 ```go
 func main() {
+    // 默认输出到控制台，也可以通过log.SetOutput()设置日志输出到文件
     log.Info("message", log.Content{
         "content":"this is log content",
         "params": "some other params",
