@@ -6,6 +6,7 @@ import (
 	"github.com/hongker/framework/component/mysql"
 	"github.com/hongker/framework/component/rbac"
 	"github.com/hongker/framework/component/redis"
+	"github.com/hongker/framework/component/session"
 	"github.com/hongker/framework/config"
 	"github.com/jinzhu/gorm"
 	"time"
@@ -65,5 +66,21 @@ func InitRedis() error {
 	}
 
 	redisConn = rdb
+	return nil
+}
+
+// InitSessionStore 初始化sessionStore
+func InitSessionStore() error  {
+	conn, err := redis.Connect(config.Redis().SessionOptions())
+	if err != nil {
+		return err
+	}
+
+	store, err := session.NewRedisStoreWithConn(conn)
+	if err != nil {
+		return err
+	}
+
+	sessionStore = store
 	return nil
 }

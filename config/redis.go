@@ -32,6 +32,9 @@ type redis struct {
 	IdleTimeout time.Duration
 
 	Cluster string
+
+	// session的db
+	SessionDB int
 }
 
 // Options get redis options
@@ -48,6 +51,23 @@ func (conf *redis) Options() *goredis.Options {
 	}
 }
 
+// DBOptions 更换db
+func (conf *redis) SessionOptions() *goredis.Options {
+	address := net.JoinHostPort(conf.Host, strconv.Itoa(conf.Port))
+	if conf.SessionDB == 0 {
+		conf.SessionDB = conf.DB
+	}
+
+	return &goredis.Options{
+		Addr:        address,
+		Password:    conf.Auth,
+		PoolSize:    conf.PoolSize,
+		MaxRetries:  conf.MaxRetries,
+		IdleTimeout: conf.IdleTimeout,
+		DB:          conf.SessionDB,
+	}
+}
+
 // Redis 获取redis配置
 func Redis() *redis {
 	return &redis{
@@ -59,5 +79,6 @@ func Redis() *redis {
 		MaxRetries:  3,
 		IdleTimeout: 3,
 		Cluster:     viper.GetString(GetKeyWithRunMode(redisCluster)),
+		SessionDB: viper.GetInt(GetKeyWithRunMode(redisSessionDB)),
 	}
 }

@@ -1,8 +1,8 @@
 package session
 
 import (
+	"github.com/go-redis/redis"
 	"github.com/gorilla/sessions"
-	"github.com/hongker/framework/app"
 	"github.com/rbcervilla/redisstore"
 )
 
@@ -11,9 +11,9 @@ func NewCookieStore(key string) *sessions.CookieStore {
 	return sessions.NewCookieStore([]byte(key))
 }
 
-// NewRedisStore 返回基于redis存储机制的session
-func NewRedisStore() (*redisstore.RedisStore, error) {
-	store, err := redisstore.NewRedisStore(app.Redis())
+// NewRedisStoreWithConn 指定连接获取session store
+func NewRedisStoreWithConn(client redis.UniversalClient) (*redisstore.RedisStore, error) {
+	store, err := redisstore.NewRedisStore(client)
 	if err != nil {
 		return nil, err
 	}

@@ -6,6 +6,7 @@ package app
 import (
 	"github.com/casbin/casbin/v2"
 	"github.com/go-redis/redis"
+	"github.com/gorilla/sessions"
 	"github.com/hongker/framework/config"
 	"github.com/jinzhu/gorm"
 	"go.uber.org/dig"
@@ -20,6 +21,7 @@ var (
 	db        *gorm.DB
 	enforcer  *casbin.Enforcer
 	redisConn redis.UniversalClient
+	sessionStore sessions.Store
 )
 
 // Container 容器
@@ -62,4 +64,9 @@ func Http() (client *http.Client) {
 		}
 	}
 	return
+}
+
+// SessionStore 返回Session store
+func SessionStore() sessions.Store {
+	return sessionStore
 }

@@ -45,6 +45,7 @@ const (
 
 	redisHost    = "redis.host"
 	redisDB      = "redis.db"
+	redisSessionDB      = "redis.sessionDB"
 	redisPass    = "redis.pass"
 	redisPort    = "redis.port"
 	redisCluster = "redis.cluster"

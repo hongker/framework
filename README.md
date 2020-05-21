@@ -171,7 +171,11 @@ local:  # 本地运行环境的配置
       user : root
       password : 123456
       name : activity
-
+  redis:        # redis配置
+    host: 127.0.0.1 # 地址
+    port: 6379      # 端口
+    db: 5           # db,最好是用0
+    sessionDB: 4    # 额外指定sessionDB
 dev:
   db:     # mysql数据库配置，支持读写分离，第一个默认为写库
     maxIdleConnections: 10    # 连接池配置
@@ -263,7 +267,7 @@ router.Post("/user/auth", func(ctx *gin.Context) {
 
 ### Session
 实现基于文件存储和redis存储的session组件.注:session和Request，Writer关联，故最好是放在接口层获取或保存。
-
+建议不使用session,而是用jwt这种无状态的校验机制。
 - 文件存储   
 ```go
 store := session.NewCookieStore("userState")
@@ -292,11 +296,12 @@ server.Router.GET("/user", func(ctx *gin.Context) {
 - Redis存储   
 很多情况下，服务都是以分布式的方式部署，文件存储并不适用于该场景，需要借助Redis实现。
 ```go
-redisStore, err := session.NewRedisStore()
-secure.Panic(err)
+// 初始化，一般在init函数里执行
+secure.Panic(app.InitSessionStore())
+// 使用
 server.Router.GET("/redis/login", func(ctx *gin.Context) {
     // 获取一个key为user的session
-	s , _ := redisStore.Get(ctx.Request, "user")
+	s , _ := app.SessionStore().Get(ctx.Request, "user")
     // 赋值
 	s.Values["name"] = ctx.Query("name")
     // 保存
@@ -311,7 +316,7 @@ server.Router.GET("/redis/login", func(ctx *gin.Context) {
 
 server.Router.GET("/redis/user", func(ctx *gin.Context) {
     // 读取session
-	s , _ := redisStore.Get(ctx.Request, "user")
+	s , _ := app.SessionStore().Get(ctx.Request, "user")
 	fmt.Println(s.Values)
 })
 ```
