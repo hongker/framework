@@ -1,11 +1,9 @@
 package response
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/hongker/framework/component/paginate"
 	"github.com/hongker/framework/component/trace"
 	"github.com/hongker/framework/util/strings"
-	"reflect"
 )
 
 const (
@@ -33,6 +31,13 @@ type Response struct {
 	Meta Meta `json:"meta"`
 }
 
+func (r *Response) Reset() {
+	r.Code = 0
+	r.Meta = meta()
+	r.Message = successMessage
+	r.Data = nil
+}
+
 // requestId
 func requestId() string {
 	return requestPrefix + strings.UUID()
@@ -57,64 +62,3 @@ type Meta struct {
 	Pagination *paginate.Pagination `json:"pagination"`
 }
 
-// wrapper context装饰器
-type wrapper struct {
-	ctx *gin.Context
-}
-
-// Wrap
-func Wrap(ctx *gin.Context) *wrapper {
-	// TODO 实现pool池，减少GC
-	return &wrapper{
-		ctx: ctx,
-	}
-}
-
-// newResponse 构造一个Response
-func newResponse(code int, message string) Response {
-	// TODO pool池，减少GC
-	return Response{
-		Message: message,
-		Code:    code,
-		Data:    nil,
-		Meta: Meta{
-			RequestId:  requestId(),
-			TraceId:    trace.Get(),
-			Pagination: nil,
-		},
-	}
-}
-
-// output output response
-func (w *wrapper) output(response Response) {
-	w.ctx.JSON(200, response)
-}
-
-// Success 输出成功响应
-func (w *wrapper) Success(data interface{}) {
-	response := newResponse(0, successMessage)
-	response.Data = data
-
-	w.output(response)
-}
-
-// Error 输出错误响应
-func (w *wrapper) Error(code int, message string) {
-	response := newResponse(code, message)
-
-	w.output(response)
-}
-
-// Paginate 输出分页响应内容
-func (w *wrapper) Paginate(data interface{}, pagination *paginate.Pagination) {
-	response := newResponse(0, successMessage)
-	// 如果data为nil,则默认设置为[]
-	v := reflect.ValueOf(data)
-	if v.IsNil() {
-		data = []interface{}{}
-	}
-	response.Data = data
-	response.Meta.Pagination = pagination
-
-	w.output(response)
-}
