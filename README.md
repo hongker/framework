@@ -166,16 +166,27 @@ server:
   port : 8085 #端口号
 
 local:  # 本地运行环境的配置
-  db:     # mysql数据库配置，支持读写分离，第一个默认为写库
-    maxIdleConnections: 10    # 连接池配置
-    maxOpenConnections: 40
-    maxLifeTime: 10
-    dsn:    # 数据库连接
-    - host : 127.0.0.1
-      port : 3306
-      user : root
-      password : 123456
-      name : activity
+  db:     # mysql数据库配置，支持多连接，支持读写分离，第一个默认为写库
+    default: # 默认的库连接
+        maxIdleConnections: 10    # 连接池配置
+        maxOpenConnections: 40
+        maxLifeTime: 10
+        dsn:    # 数据库连接
+        - host : 127.0.0.1
+          port : 3306
+          user : root
+          password : 123456
+          name : activity
+    other:  # 另外一个库连接
+        maxIdleConnections: 10    # 连接池配置
+        maxOpenConnections: 40
+        maxLifeTime: 10
+        dsn:    # 数据库连接
+        - host : 127.0.0.1
+          port : 3306
+          user : root
+          password : 123456
+          name : other    
   redis:        # redis配置
     host: 127.0.0.1 # 地址
     port: 6379      # 端口
@@ -183,20 +194,21 @@ local:  # 本地运行环境的配置
     sessionDB: 4    # 额外指定sessionDB
 dev:
   db:     # mysql数据库配置，支持读写分离，第一个默认为写库
-    maxIdleConnections: 10    # 连接池配置
-    maxOpenConnections: 40
-    maxLifeTime: 10
-    dsn:    # 数据库连接
-      - host: 127.0.0.1   # 写库
-        port: 3306
-        user: root
-        password: 123456
-        name: activity
-      - host: 127.0.0.2   # 从库
-        port: 3306
-        user: root
-        password: 123456
-        name: activity
+    default: #默认连接
+        maxIdleConnections: 10    # 连接池配置
+        maxOpenConnections: 40
+        maxLifeTime: 10
+        dsn:    # 数据库连接
+          - host: 127.0.0.1   # 写库
+            port: 3306
+            user: root
+            password: 123456
+            name: activity
+          - host: 127.0.0.2   # 从库
+            port: 3306
+            user: root
+            password: 123456
+            name: activity
 ```
 
 - 读取配置
@@ -217,8 +229,10 @@ someIntConfig := viper.GetInt("someIntKey")
 // 在成功加载配置后，初始化数据库连接,连接失败时panic
 secure.Panic(app.InitDB())
 
-// 获取数据库连接
+// 获取默认的数据库连接
 app.DB()
+// 根据名称获取数据库连接
+app.GetDB("other")
 ```
 #### Redis
 
