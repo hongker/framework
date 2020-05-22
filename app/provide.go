@@ -18,10 +18,6 @@ const (
 
 // InitPermissionManager 初始化权限管理器
 func InitPermissionManager(adapter persist.Adapter) error {
-	if db == nil {
-		return fmt.Errorf("database not init")
-	}
-
 	e, err := rbac.NewManagerWithAdapter(adapter)
 	if err != nil {
 		return nil
@@ -33,23 +29,29 @@ func InitPermissionManager(adapter persist.Adapter) error {
 
 // InitDB 初始化DB
 func InitDB() error {
-	dataSourceItems := config.Mysql().DataSourceItems()
-
-	adapter, err := mysql.NewReadWriteAdapter(mysqlDialectType, dataSourceItems)
-	if err != nil {
-		return err
+	group := config.MysqlGroup()
+	if group.Items == nil {
+		return fmt.Errorf("mysql config is empty")
 	}
 
-	adapter.SetMaxIdleConns(config.Mysql().MaxIdleConnections)
-	adapter.SetMaxOpenConns(config.Mysql().MaxOpenConnections)
-	adapter.SetConnMaxLifetime(time.Duration(config.Mysql().MaxLifeTime) * time.Second)
+	for name, item := range group.Items {
+		dataSourceItems := item.DataSourceItems()
 
-	conn, err := gorm.Open(mysqlDialectType, adapter)
-	if err != nil {
-		return err
+		adapter, err := mysql.NewReadWriteAdapter(mysqlDialectType, dataSourceItems)
+		if err != nil {
+			return err
+		}
+
+		adapter.SetMaxIdleConns(item.MaxIdleConnections)
+		adapter.SetMaxOpenConns(item.MaxOpenConnections)
+		adapter.SetConnMaxLifetime(time.Duration(item.MaxLifeTime) * time.Second)
+
+		conn, err := gorm.Open(mysqlDialectType, adapter)
+		if err != nil {
+			return err
+		}
+		dbGroup[name] = conn
 	}
-
-	db = conn
 
 	return nil
 }

@@ -34,12 +34,6 @@ const (
 	// 全局ID的header配置项
 	traceHeaderKey = "server.traceHeader"
 
-	dbMaxIdleConnectionsKey = "db.maxIdleConnections"
-	dbMaxOpenConnectionsKey = "db.maxOpenConnections"
-	dbMaxLifeTime           = "db.maxLifeTime"
-
-	dbDataSourcesKey = "db.dsn"
-
 	// 应用日志名称
 	appKey = "app"
 

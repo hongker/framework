@@ -18,7 +18,7 @@ import (
 var container = dig.New()
 
 var (
-	db        *gorm.DB
+	dbGroup        = make(map[string]*gorm.DB)
 	enforcer  *casbin.Enforcer
 	redisConn redis.UniversalClient
 	sessionStore sessions.Store
@@ -31,7 +31,12 @@ func Container() *dig.Container {
 
 // DB 返回数据库连接
 func DB() *gorm.DB {
-	return db
+	return dbGroup[config.DefaultMysqlConnection]
+}
+
+// GetDB 通过名称获取数据库连接
+func GetDB(connectionName string) *gorm.DB {
+	return dbGroup[connectionName]
 }
 
 // Redis 返回redis连接

@@ -3,47 +3,72 @@ package config
 import (
 	"fmt"
 	"github.com/spf13/viper"
+	"log"
 	"net"
 	"strconv"
 )
 
+const (
+	DefaultMysqlConnection = "default"
+)
+
+type mysqlGroup struct {
+	Items map[string]mysql
+}
+
+// MysqlGroup 读取多条mysql配置项
+func MysqlGroup() *mysqlGroup {
+	group := new(mysqlGroup)
+	configKey := GetKeyWithRunMode("db")
+	var items map[string]mysql
+	if err := viper.UnmarshalKey(configKey, &items); err != nil {
+		log.Println("Read Mysql Config:", err.Error())
+		return group
+	}
+	group.Items = items
+
+	return group
+}
+
+
 // mysql Mysql的配置项
 type mysql struct {
-	// 表连接
-	TablePrefix string
+	// 表前缀
+	TablePrefix string `mapstructure:"tablePrefix"`
 
 	// data sources
-	DataSources []DataSource
+	DataSources []DataSource `mapstructure:"dsn"`
+
 	// 最大空闲连接数
-	MaxIdleConnections int
+	MaxIdleConnections int `mapstructure:"maxIdleConnections"`
 
 	// 最大打开连接数
-	MaxOpenConnections int
+	MaxOpenConnections int `mapstructure:"maxOpenConnections"`
 
 	// 最长活跃时间
-	MaxLifeTime int
+	MaxLifeTime int `mapstructure:"maxLifeTime"`
 }
 
 // DataSource 连接配置
 type DataSource struct {
 	// host
-	Host string
+	Host string `mapstruture:"host"`
 
 	// 端口号
-	Port int
+	Port int `mapstructure:"port"`
 
 	// 用户名
-	User string
+	User string `mapstructure:"user"`
 
 	// 密码
-	Password string
+	Password string `mapstructure:"password"`
 
 	// 数据库名称
-	Name string
+	Name string `mapstructure:"name"`
 }
 
 // DataSourceItems 获取全部dsn资源
-func (conf *mysql) DataSourceItems() []string {
+func (conf mysql) DataSourceItems() []string {
 	var items []string
 	for _, dsn := range conf.DataSources {
 		items = append(items, dsn.Dsn())
@@ -58,23 +83,4 @@ func (conf DataSource) Dsn() string {
 		conf.Password,
 		net.JoinHostPort(conf.Host, strconv.Itoa(conf.Port)),
 		conf.Name)
-}
-
-// Mysql 返回mysql配置
-func Mysql() *mysql {
-	return &mysql{
-		DataSources:        dsn(),
-		MaxIdleConnections: viper.GetInt(GetKeyWithRunMode(dbMaxIdleConnectionsKey)),
-		MaxOpenConnections: viper.GetInt(GetKeyWithRunMode(dbMaxOpenConnectionsKey)),
-		MaxLifeTime:        viper.GetInt(GetKeyWithRunMode(dbMaxLifeTime)),
-	}
-}
-
-// dsn
-func dsn() []DataSource {
-	var items []DataSource
-	if err := viper.UnmarshalKey(GetKeyWithRunMode(dbDataSourcesKey), &items); err != nil {
-		return nil
-	}
-	return items
 }
