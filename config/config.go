@@ -43,6 +43,9 @@ const (
 	redisPass    = "redis.pass"
 	redisPort    = "redis.port"
 	redisCluster = "redis.cluster"
+
+	// 禁用swagger的环境变量标识
+	DisableSwaggerEnv = "DisableSwagger"
 )
 
 // GetKeyWithRunMode 根据运行环境获取key

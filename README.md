@@ -128,6 +128,29 @@ server.Router.Use(middleware.RequestLog)
 ### Swagger接口文档生成
 集成了`github.com/swaggo/gin-swagger`,通过注解自动生成接口文档，使用方式请查看:[gin-swagger文档](https://github.com/swaggo/gin-swagger)
 
+- 命令行工具   
+下载地址：[https://github.com/swaggo/swag/releases](https://github.com/swaggo/swag/releases)
+
+- 通过注解生成文档   
+关于注解的规范说明请参考 [https://github.com/swaggo/swag/blob/master/README_zh-CN.md#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B](https://github.com/swaggo/swag/blob/master/README_zh-CN.md#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
+```
+// 生成docs目录下的文件
+swag init
+```
+- 在router里添加    
+```go
+// 引入包里的docs信息
+import _ "packageName/docs"
+// 提供访问入口
+router.GET("/swagger/*any", middleware.SwaggerHandler())
+// 在生产环境中，需要关闭。通过设置环境变量： export DisableSwagger=true 
+```
+
+最后访问: [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)，即可看到文档
+
+- 备注   
+个人不是很推荐使用这种方式做接口文档，因为go对注解的支持不够，会让项目的代码形成混乱的现象。
+
 ### 配置
 - 加载配置
 ```go
