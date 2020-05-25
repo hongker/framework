@@ -16,6 +16,8 @@ type Pagination struct {
 
 	// 总页数
 	PageTotal int `json:"page_total"`
+
+	Total int `json:"total"`
 }
 
 const (
@@ -30,6 +32,7 @@ func Paginate(totalCount, currentPage, limit int) Pagination {
 	pagination := Pagination{
 		PageNo: currentPage,
 		Limit:  limit,
+		Total: totalCount,
 	}
 
 	// 设置默认条数,后期改为可配置
