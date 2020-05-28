@@ -47,3 +47,12 @@ func RandInt(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 	return min + rand.Intn(max-min)
 }
+
+// DefaultInt
+func DefaultInt(val , defaultVal int) int {
+	if val == 0 {
+		return defaultVal
+	}
+
+	return val
+}
