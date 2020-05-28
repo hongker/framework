@@ -9,6 +9,7 @@
 package trace
 
 import (
+	"fmt"
 	"github.com/hongker/framework/util/strings"
 	"github.com/petermattis/goid"
 	"sync"
