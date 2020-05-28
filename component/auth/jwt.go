@@ -3,19 +3,15 @@ package auth
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/hongker/framework/util/number"
-	"time"
 )
 
 // Jwt json web token
 type Jwt interface {
-	// Parse token
-	ParseToken(token string) (jwt.Claims, error)
-
 	// Create token
-	CreateToken(claimsCreator func() jwt.Claims) (string, error)
+	GenerateToken(claims jwt.Claims) (string, error)
 
-	GenerateToken(tokenExpireTime int, iss string) (string, error)
+	// 解析token
+	ParseWithClaims(token string, claims jwt.Claims) error
 }
 
 // JwtAuth jwt
@@ -32,40 +28,26 @@ var (
 	TokenValidateFailed = errors.New("token validate failed")
 )
 
-// CreateToken create token
-func (jwtAuth JwtAuth) CreateToken(claimsCreator func() jwt.Claims) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claimsCreator())
+// CreateToken 生成token
+func (jwtAuth JwtAuth) GenerateToken(claims jwt.Claims) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(jwtAuth.SignKey)
 }
 
-// ParseToken parse token
-func (jwtAuth JwtAuth) ParseToken(token string) (jwt.Claims, error) {
-	tokenClaims, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+// ParseWithClaims 解析token
+func (jwtAuth JwtAuth) ParseWithClaims(token string, claims jwt.Claims) error {
+	tokenClaims, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtAuth.SignKey, nil
 	})
 
 	if err != nil {
-		return nil, err
+		return  err
 	}
 
-	if tokenClaims.Claims == nil || !tokenClaims.Valid {
-		return nil, TokenValidateFailed
+	if err := claims.Valid(); err != nil {
+		return TokenValidateFailed
 	}
+	claims = tokenClaims.Claims
 
-	return tokenClaims.Claims, nil
-}
-
-// GenerateToken
-func (jwtAuth JwtAuth) GenerateToken(tokenExpireTime int, iss string) (string, error) {
-	tokenExpireTime = number.DefaultInt(tokenExpireTime, 3000)
-	now := time.Now().Unix()
-	exp := now + int64(tokenExpireTime)
-	claim := jwt.MapClaims{
-		"iss": iss,
-		"iat": now,
-		"exp": exp,
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
-	tokenStr, err := token.SignedString(jwtAuth.SignKey)
-	return tokenStr, err
+	return nil
 }
